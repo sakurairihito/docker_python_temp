@@ -4,7 +4,7 @@ poetryでパッケージの依存関係を自動管理などしてくれる。po
 
 dockerでjupyterlabを開いで開発を進める。
 
-こちらは、まずローカルの環境(私の場合は、mac)で、pyproject.tomlとp
+こちらは、まずローカルの環境(私の場合は、mac)で、poetry initをした後、pyproject.tomlとpoetry.lockを作成してからこれを
 
 vscodeも簡単に追加できる（後でやる）
 
