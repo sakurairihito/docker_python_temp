@@ -1,31 +1,60 @@
+#https://tech-blog.s-yoshiki.com/entry/236を参考にした。
 name: Run pytest
-on: [push]
+
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   pytest:
+    # 実行環境として `ubuntu-latest` という名前のものを選ぶ
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
 
     steps:
       # リポジトリをチェックアウト
+      # See: https://github.com/actions/checkout
       - name: Checkout
         uses: actions/checkout@v2
 
       # Pythonの環境をセットアップ
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: ${{ matrix.python-version }}
 
-      # pytestをインストール
-      - name: Install dependencies
+      # Poetry そのものをインストールする
+      - name: Install Poetry
         run: |
-          python -m pip install --upgrade pip
-          pip install pytest
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
 
-      # pytest -> JUnit xml形式で結果を出力
-      - name: PyTest
-        run: 
-          pytest tests
-        continue-on-error: true
+      # Poetry へのパスを通す
+      - name: Add path for Poetry
+        run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
 
+      # インストールした Poetry を使って必要な Python パッケージをインストールする
+      # --no-interaction は、 Do not ask any interactive question.という意味。
+      - name: Install Dependencies
+        run: poetry install --no-interaction 
+
+      # pytest を実行しカバレッジを取得する
+      # --cov : テスト対象のディレクトリを指定します
+      # --cov-branch : 条件分岐(c1) のカバレッジを取得します
+      # -v : テストコードを指定します
+      # --cov-report : レポートを出力します。htmlやxmlが選択できます。
+      - name: Run Tests
+        run: poetry run pytest --cov=abc2 --cov-branch -v ./tests/test_* --cov-report=xml 
+
+      # codecovへカバレッジ結果をupload
+      - name: Upload coverage to Codecov
+        if: ${{ matrix.python-version==3.9 }}
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.DOCKER_TEMP }} # ← CODECOVのアップロードトークン
+          file: ./coverage.xml
+          name: codecov-umbrella
+          fail_ci_if_error: true
         
