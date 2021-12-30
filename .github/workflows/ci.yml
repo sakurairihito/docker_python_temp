@@ -15,7 +15,6 @@ jobs:
     # fail-fast: false で、あるJobがfailしても他のJobはcancelされず最後まで処理が継続される。
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         python-version: [3.9]
 
