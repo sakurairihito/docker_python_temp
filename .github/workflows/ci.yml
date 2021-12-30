@@ -20,8 +20,6 @@ jobs:
         python-version: [3.9]
 
     steps:
-      # リポジトリをチェックアウト
-      # See: https://github.com/actions/checkout
       - name: Checkout
         uses: actions/checkout@v2
 
