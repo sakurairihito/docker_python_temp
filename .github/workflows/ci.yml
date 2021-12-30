@@ -9,7 +9,6 @@ on:
     branches: 
       - master 
 
-
 jobs:
   pytest:
 
@@ -23,7 +22,7 @@ jobs:
 
     steps:
       # リポジトリをチェックアウト
-      # See: https://github.com/actions/checkout
+      # See:https://github.com/actions/checkout
       - name: Checkout
         uses: actions/checkout@v2
 
