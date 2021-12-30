@@ -5,12 +5,19 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches: 
+      - master 
+
 
 jobs:
   pytest:
+
     # 実行環境として `ubuntu-latest` という名前のものを選ぶ
+    # fail-fast: false で、あるJobがfailしても他のJobはcancelされず最後まで処理が継続される。
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: [3.9]
 
@@ -34,27 +41,18 @@ jobs:
       # Poetry へのパスを通す
       - name: Add path for Poetry
         run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+      
+      - name: Poetry Version
+      run: |
+        poetry --version
 
       # インストールした Poetry を使って必要な Python パッケージをインストールする
       # --no-interaction は、 Do not ask any interactive question.という意味。
       - name: Install Dependencies
         run: poetry install --no-interaction 
 
-      # pytest を実行しカバレッジを取得する
-      # --cov : テスト対象のディレクトリを指定します
-      # --cov-branch : 条件分岐(c1) のカバレッジを取得します
-      # -v : テストコードを指定します
-      # --cov-report : レポートを出力します。htmlやxmlが選択できます。
-      - name: Run Tests
-        run: poetry run pytest --cov-report=html tests 
+      # pytest を実行し
+      - name: Run Tests with Pytest
+        run: poetry run pytest 
 
-      # codecovへカバレッジ結果をupload
-      - name: Upload coverage to Codecov
-        if: ${{ matrix.python-version==3.9 }}
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.DOCKER_TEMP }} # ← CODECOVのアップロードトークン
-          file: ./coverage.xml
-          name: codecov-umbrella
-          fail_ci_if_error: true
         
