@@ -1,3 +1,5 @@
+# https://tech-blog.s-yoshiki.com/entry/236 や
+# https://zenn.dev/nasubita/articles/81676e51b150dc　を参考。
 name: Run pytest 
 
 on:
@@ -7,7 +9,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  pytest:
 
     runs-on: ubuntu-latest
     strategy:
