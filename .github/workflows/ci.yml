@@ -1,0 +1,10 @@
+name : Continuous Integration
+on : push
+
+jobs : 
+   unit-test : 
+     defaults:
+       run: 
+         shell: python
+           working-directory: /tests  
+
