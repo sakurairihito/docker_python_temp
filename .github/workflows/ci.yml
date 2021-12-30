@@ -46,7 +46,7 @@ jobs:
       # -v : テストコードを指定します
       # --cov-report : レポートを出力します。htmlやxmlが選択できます。
       - name: Run Tests
-        run: poetry run pytest tests
+        run: poetry run pytest tests --cov-report=html
 
       # codecovへカバレッジ結果をupload
       - name: Upload coverage to Codecov
