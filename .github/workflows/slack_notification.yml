@@ -1,9 +1,39 @@
+# https://zenn.dev/shonansurvivors/articles/fab832f7bfa8cebac24f　参考にした
 name: slack_notification
 on:
   push:
     branches:
       - master
 
+jobs:
+  pytest:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install poetry
+      run: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+    - name: Poetry Version
+      run: |
+        poetry --version
+    - name: Poetry Install Dependencies
+      run: |
+        poetry install --no-interaction
+    - name: Test with pytest
+      run: |
+        poetry run pytest
+        
 jobs:
   notification:
     runs-on: ubuntu-latest
@@ -19,7 +49,8 @@ jobs:
         uses: 8398a7/action-slack@v3.8.0
         with:
           status: ${{ job.status }}
+          fields: repo,message,commit,author,action,job,took,eventName,ref,workflow # 追加
         env:
-          GITHUB_TOKEN: ${{ secrets.DOCKER_TEMP }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_SAITAMAUNIV_SAKURAIRIHITO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always()
