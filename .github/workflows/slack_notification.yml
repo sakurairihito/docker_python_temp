@@ -1,4 +1,5 @@
-# https://zenn.dev/shonansurvivors/articles/fab832f7bfa8cebac24f　参考にした
+# test actions --> https://zenn.dev/shonansurvivors/articles/fab832f7bfa8cebac24f　参考にした
+# slack notification --> https://github.com/github-actions-up-and-running/slack-notify
 name: slack_notification
 on:
   push:
@@ -36,6 +37,13 @@ jobs:
         poetry run pytest
     - name: Slack notification
       if: failure()
+      # v2.0.1
+      uses: rtCamp/action-slack-notify@8a36de024523717693a9a7b80c6ead640d8873ce
+      env:
+        SLACK_COLOR: danger
+        SLACK_WEBHOOK: ${{ secrets.SLACK_SAITAMAUNIV_SAKURAIRIHITO }}
+     - name: Slack notification
+      if: success()
       # v2.0.1
       uses: rtCamp/action-slack-notify@8a36de024523717693a9a7b80c6ead640d8873ce
       env:
