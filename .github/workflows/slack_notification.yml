@@ -42,7 +42,7 @@ jobs:
         SLACK_COLOR: danger
         SLACK_WEBHOOK: ${{ secrets.SLACK_SAITAMAUNIV_SAKURAIRIHITO }}
     - name: Slack Notification on Success
-        if:  success() 
+        if: success() 
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_TITLE: Deploy Success
