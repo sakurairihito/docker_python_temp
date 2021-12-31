@@ -47,3 +47,4 @@ jobs:
       env:
         SLACK_TITLE: Deploy Success
         SLACK_COLOR: good
+        SLACK_SAITAMAUNIV_SAKURAIRIHITO: ${{ secrets.SLACK_SAITAMAUNIV_SAKURAIRIHITO }}
