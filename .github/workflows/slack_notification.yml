@@ -33,7 +33,6 @@ jobs:
     - name: Test with pytest
       run: |
         poetry run pytest
-    
     - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         if  : failure() && steps.run-script.outcome == 'failure'
