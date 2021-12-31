@@ -33,12 +33,8 @@ jobs:
     - name: Test with pytest
       run: |
         poetry run pytest
-        
-jobs:
-  notification:
-    runs-on: ubuntu-latest
-
-    steps:
+    
+    teps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -54,3 +50,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always()
+        
