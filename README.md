@@ -1,5 +1,7 @@
 # Poetry + Docker + JupyterLab
 
+## Poetry
+
 poetryでパッケージの依存関係を自動管理などしてくれる。poetry initをすると、pytestもデフォルトでインストールしてくれる。
 
 dockerでjupyterlabを開いで開発を進める。
